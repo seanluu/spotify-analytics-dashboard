@@ -262,8 +262,7 @@ public class SpotifyController {
     
 
     public static class PlaylistGenerationRequest {
-        @NotBlank(message = "Template is required")  // Must not be empty
-        public String template;
+        public String template;  // Optional field
         
         @NotBlank(message = "Time range is required")
         @Pattern(regexp = TIME_RANGE_PATTERN, message = TIME_RANGE_ERROR)  // Validate time range

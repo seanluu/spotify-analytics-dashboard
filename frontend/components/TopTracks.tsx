@@ -63,13 +63,15 @@ export function TopTracks({ timeRange }: TopTracksProps) {
         time_range: timeRange,
         name: `My Top Tracks - ${timeRange === 'short_term' ? 'Last 4 weeks' : timeRange === 'medium_term' ? 'Last 6 months' : 'All time'} - ${new Date().toLocaleDateString()}`,
         description: `Your top tracks from ${timeRange === 'short_term' ? 'last 4 weeks' : timeRange === 'medium_term' ? 'last 6 months' : 'all time'}`,
-        public: false,
+        public_playlist: false,
       });
 
       if (response.data) {
         toast.success(`"${response.data.name}" created successfully!`);
       }
     } catch (error) {
+      console.error('Playlist creation error:', error);
+      console.error('Error response:', error.response?.data);
       toast.error('Failed to create playlist. Please try again.');
     } finally {
       setIsGenerating(false);

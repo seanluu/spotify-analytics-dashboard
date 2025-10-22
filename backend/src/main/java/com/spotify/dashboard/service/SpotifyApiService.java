@@ -1,6 +1,7 @@
 package com.spotify.dashboard.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -59,7 +60,7 @@ public class SpotifyApiService {
     @SuppressWarnings("unchecked")
     private Map<String, Object> makePostRequest(String endpoint, String accessToken, Object body) {
         try {
-            HttpEntity<String> entity = new HttpEntity<>(createHeaders(accessToken));
+            HttpEntity<Object> entity = new HttpEntity<>(body, createHeaders(accessToken));
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                 spotifyApiBaseUrl + endpoint,
                 HttpMethod.POST,
@@ -77,20 +78,24 @@ public class SpotifyApiService {
     // below are the API call methods that build the speciifc Spotify endpoint/path (and query params if needed),
     // then returns the response parsed from JSON into Map<String, Object> for easy accessibility
 
+    @Cacheable(value = "user", key = "#accessToken.hashCode()")
     public Map<String, Object> getCurrentUser(String accessToken) {
         return makeGetRequest("/me", accessToken);
     }
 
+    @Cacheable(value = "topTracks", key = "#accessToken.hashCode() + '_' + #timeRange + '_' + #limit")
     public Map<String, Object> getTopTracks(String accessToken, String timeRange, int limit) {
         String endpoint = "/me/top/tracks?time_range=" + timeRange + "&limit=" + limit;
         return makeGetRequest(endpoint, accessToken);
     }
 
+    @Cacheable(value = "topArtists", key = "#accessToken.hashCode() + '_' + #timeRange + '_' + #limit")
     public Map<String, Object> getTopArtists(String accessToken, String timeRange, int limit) {
         String endpoint = "/me/top/artists?time_range=" + timeRange + "&limit=" + limit;
         return makeGetRequest(endpoint, accessToken);
     }
 
+    @Cacheable(value = "artists", key = "#accessToken.hashCode() + '_' + #artistIds.hashCode()")
     public Map<String, Object> getArtists(String accessToken, java.util.List<String> artistIds) {
         String ids = String.join(",", artistIds);
         String endpoint = "/artists?ids=" + ids;

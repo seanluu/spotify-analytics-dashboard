@@ -6,6 +6,8 @@ spring:
     name: spotify-dashboard
   config:
     import: "optional:file:.env"
+  cache:
+    type: simple
 
 # Spotify API Configuration
 spotify:
