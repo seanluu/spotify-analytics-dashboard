@@ -1,6 +1,6 @@
 # 🎵 Spotify Dashboard
 
-Spotify Dashboard is a modern, responsive web application that provides personalized Spotify analytics and insights. Users can connect their Spotify account to view their top artists, tracks, and genres with beautiful visualizations and interactive charts. Discover your music taste patterns across different time periods and explore your listening habits in an elegant, mobile-first interface.
+The Spotify Dashboard is a web app that provides personalized Spotify analytics based on your listening history. Users can connect their Spotify account to view their top artists, tracks, and genres through interactive charts and graphs, and discover new listening trends and patterns across different time periods.
 
 ## 🔧 Installation
 
@@ -79,7 +79,7 @@ Deployed on Vercel: [spotify-dashboard.vercel.app](https://spotify-dashboard.ver
 
 ## 🧰 Tech Stack
 
-**Frontend**: Next.js 15 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons
-**Backend**: Spring Boot 3.4, Spring Security, Spring Web, Maven
-**API**: Spotify Web API
-**DevOps**: Docker, Docker Compose
+- **Frontend**: Next.js 15 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons
+- **Backend**: Spring Boot 3.4, Spring Security, Spring Web, Maven
+- **API**: Spotify Web API
+- **DevOps**: Docker, Docker Compose
