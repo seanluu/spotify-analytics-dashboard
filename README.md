@@ -57,7 +57,7 @@ npm run dev
 
 1. Visit the home page and click "Connect with Spotify"
 2. Authorize the application with your Spotify account
-3. Explore your top artists in a beautiful 3-column grid
+3. Explore your top artists in a 3-column grid
 4. View your favorite tracks with album artwork
 5. Analyze your music taste with interactive genre charts
 6. Switch between time ranges (4 weeks, 6 months, all time)
@@ -66,7 +66,7 @@ npm run dev
 ## Features
 
 - **Authentication**: Secure Spotify OAuth login
-- **Top Artists**: Beautiful grid layout with artist images and play counts
+- **Top Artists**: Grid layout with artist images and play counts
 - **Top Tracks**: Track list with album artwork and preview links
 - **Top Genres**: Interactive pie charts showing music taste distribution
 - **Time Range Selection**: Analyze habits across different periods
@@ -77,5 +77,5 @@ npm run dev
 
 - **Frontend**: Next.js 15 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons
 - **Backend**: Spring Boot 3.4, Spring Security, Spring Web, Maven
-- **API**: Spotify Web API
+- **API**: Spotify Web API, ReccoBeats API
 - **DevOps**: Docker, Docker Compose
