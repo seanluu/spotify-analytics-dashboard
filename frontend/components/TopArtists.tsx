@@ -9,7 +9,7 @@ interface TopArtistsProps {
 }
 
 export function TopArtists({ timeRange }: TopArtistsProps) {
-  const { data: artists, isLoading } = useSimpleApi<Artist>('/api/spotify/top/artists', { time_range: timeRange, limit: 50 });
+  const { data: artists, isLoading } = useSimpleApi<Artist>('/spotify/top/artists', { time_range: timeRange, limit: 50 });
 
   if (isLoading) {
     return (
@@ -27,7 +27,7 @@ export function TopArtists({ timeRange }: TopArtistsProps) {
           <h2 className="text-heading">🎤 Top Artists</h2>
         </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {artists.map((artist, index) => (
           <div
             key={artist.id}
@@ -38,7 +38,7 @@ export function TopArtists({ timeRange }: TopArtistsProps) {
               <img
                 src={artist.images[1]?.url || artist.images[0]?.url}
                 alt={artist.name}
-                className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
               />
               
               <div className="absolute top-2 left-2">
@@ -92,3 +92,4 @@ export function TopArtists({ timeRange }: TopArtistsProps) {
     </div>
   );
 }
+

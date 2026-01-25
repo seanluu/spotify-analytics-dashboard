@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 import { Header } from './Header';
+import { User } from '@/types';
 import { TopArtists } from './TopArtists';
 import { TopGenres } from './TopGenres';
 import { TopTracks } from './TopTracks';
-import { useAuth } from '@/hooks/useAuth';
-import { LoginPage } from './LoginPage';
+import { AudioInsights } from './AudioInsights';
 
-export function Dashboard() {
-  const { user, isLoading } = useAuth();
+interface DashboardProps {
+  user: User;
+}
+
+export function Dashboard({ user }: DashboardProps) {
   const [activeTab, setActiveTab] = useState('tracks');
   const [timeRange, setTimeRange] = useState('medium_term');
 
@@ -17,19 +20,8 @@ export function Dashboard() {
     { id: 'tracks', name: 'Top Tracks', icon: '🎵' },
     { id: 'artists', name: 'Top Artists', icon: '🎤' },
     { id: 'genres', name: 'Top Genres', icon: '🎭' },
+    { id: 'insights', name: 'Audio Insights', icon: '🎧' },
   ];
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-spotify-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-spotify-green border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <LoginPage />;
-  }
 
   return (
     <div className="min-h-screen bg-spotify-black">
@@ -90,8 +82,13 @@ export function Dashboard() {
           {activeTab === 'genres' && (
             <TopGenres timeRange={timeRange} />
           )}
+          
+          {activeTab === 'insights' && (
+            <AudioInsights timeRange={timeRange} />
+          )}
         </div>
       </div>
     </div>
   );
 }
+

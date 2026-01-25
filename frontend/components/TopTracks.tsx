@@ -12,7 +12,7 @@ interface TopTracksProps {
 }
 
 export function TopTracks({ timeRange }: TopTracksProps) {
-  const { data: tracks, isLoading } = useSimpleApi<Track>('/api/spotify/top/tracks', { time_range: timeRange, limit: 50 });
+  const { data: tracks, isLoading } = useSimpleApi<Track>('/spotify/top/tracks', { time_range: timeRange, limit: 50 });
   const [isGenerating, setIsGenerating] = useState(false);
 
   const formatDuration = (ms: number): string => {
@@ -58,20 +58,18 @@ export function TopTracks({ timeRange }: TopTracksProps) {
     try {
       setIsGenerating(true);
       
-      const response = await api.post('/api/spotify/playlists/generate', {
+      const response = await api.post('/spotify/playlists/generate', {
         template: 'top-tracks',
         time_range: timeRange,
         name: `My Top Tracks - ${timeRange === 'short_term' ? 'Last 4 weeks' : timeRange === 'medium_term' ? 'Last 6 months' : 'All time'} - ${new Date().toLocaleDateString()}`,
         description: `Your top tracks from ${timeRange === 'short_term' ? 'last 4 weeks' : timeRange === 'medium_term' ? 'last 6 months' : 'all time'}`,
-        public_playlist: false,
+        public: false,
       });
 
       if (response.data) {
         toast.success(`"${response.data.name}" created successfully!`);
       }
     } catch (error) {
-      console.error('Playlist creation error:', error);
-      console.error('Error response:', error.response?.data);
       toast.error('Failed to create playlist. Please try again.');
     } finally {
       setIsGenerating(false);

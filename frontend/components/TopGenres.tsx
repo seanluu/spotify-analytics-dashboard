@@ -4,24 +4,35 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { GenreData } from '@/types';
 import { useSimpleApi } from '@/hooks/useSimpleApi';
 
+// Color palette for genre visualization
+const GENRE_COLORS = ['#1DB954', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE'];
+
 interface TopGenresProps {
   timeRange: string;
 }
 
 export function TopGenres({ timeRange }: TopGenresProps) {
-  const { data: genres, isLoading } = useSimpleApi<GenreData>('/api/spotify/analytics/genres', { time_range: timeRange });
+  const { data: genres, isLoading } = useSimpleApi<GenreData>('/spotify/analytics/genres', { time_range: timeRange });
 
   if (isLoading) {
     return (
       <div className="card">
-        <div className="flex justify-center py-8">
+        <div className="flex items-center justify-center py-12">
           <div className="w-8 h-8 border-2 border-spotify-green border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
     );
   }
 
-  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
+  interface TooltipPayload {
+    payload: {
+      name: string;
+      count: number;
+      percentage: string;
+    };
+  }
+
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: TooltipPayload[] }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -44,7 +55,6 @@ export function TopGenres({ timeRange }: TopGenresProps) {
 
       {genres.length > 0 ? (
         <div className="space-y-6">
-          {/* Simple Pie Chart */}
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -59,7 +69,7 @@ export function TopGenres({ timeRange }: TopGenresProps) {
                   dataKey="count"
                 >
                   {genres.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={['#1DB954', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE'][index % 10]} />
+                    <Cell key={`cell-${index}`} fill={GENRE_COLORS[index % GENRE_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
@@ -67,7 +77,6 @@ export function TopGenres({ timeRange }: TopGenresProps) {
             </ResponsiveContainer>
           </div>
 
-          {/* Genre List */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-white">Genre Breakdown</h3>
             {genres.map((genre, index) => (
@@ -75,7 +84,7 @@ export function TopGenres({ timeRange }: TopGenresProps) {
                 <div className="flex items-center space-x-3">
                   <div
                     className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: ['#1DB954', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE'][index % 10] }}
+                    style={{ backgroundColor: GENRE_COLORS[index % GENRE_COLORS.length] }}
                   />
                   <span className="text-white font-medium">{genre.name}</span>
                 </div>
