@@ -22,14 +22,13 @@ export function useAuth() {
         }
 
         try {
-            const response = await api.get('api/spotify/me');
+            const response = await api.get('/spotify/me');
             if (response.data) {
                 setUser(response.data);
             }
         } catch (error: unknown) {
-            if (error instanceof Error && 'response' in error && (error.response as { status?: number })?.status === 401) {
-                Cookies.remove('spotify_access_token');
-            }
+            console.error('Auth check failed:', error);
+            Cookies.remove('spotify_access_token');
         } finally {
             setIsLoading(false);
         }
