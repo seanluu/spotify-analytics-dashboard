@@ -1,4 +1,4 @@
-# 🎵 Spotify Dashboard
+# Spotify Dashboard
 
 Spotify Dashboard is a modern, responsive web application that provides personalized Spotify analytics and insights. Users can connect their Spotify account to view their top artists, tracks, and genres with beautiful visualizations and interactive charts. Discover your music taste patterns across different time periods and explore your listening habits in an elegant, mobile-first interface.
 
@@ -19,7 +19,7 @@ cd spotify-dashboard-new
 docker-compose up
 ```
 
-Open http://localhost:3000 ✨
+Open http://localhost:3000
 
 <details>
 <summary><b>Manual Setup (without Docker)</b></summary>
@@ -53,11 +53,11 @@ npm run dev
 3. Note your **Client ID** and **Client Secret**
 4. Add `http://localhost:3000/callback` to **Redirect URIs**
 
-## 🌐 Deployment
+## Deployment
 
 Deployed on Vercel: [spotify-dashboard.vercel.app](https://spotify-dashboard.vercel.app)
 
-## 🚀 Usage
+## Usage
 
 1. Visit the home page and click "Connect with Spotify"
 2. Authorize the application with your Spotify account
@@ -67,7 +67,7 @@ Deployed on Vercel: [spotify-dashboard.vercel.app](https://spotify-dashboard.ver
 6. Switch between time ranges (4 weeks, 6 months, all time)
 7. Resize the window to see the responsive layout
 
-## ✨ Features
+## Features
 
 - **Authentication**: Secure Spotify OAuth login
 - **Top Artists**: Beautiful grid layout with artist images and play counts
@@ -77,7 +77,7 @@ Deployed on Vercel: [spotify-dashboard.vercel.app](https://spotify-dashboard.ver
 - **Responsive Design**: Mobile-first design that scales to desktop
 - **Real-time Data**: Live Spotify API integration
 
-## 🧰 Tech Stack
+## Tech Stack
 
 **Frontend**: Next.js 15 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons
 **Backend**: Spring Boot 3.4, Spring Security, Spring Web, Maven
