@@ -11,8 +11,9 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@types/js-cookie": "^3.0.6",
+    "axios": "^1.13.2",
     "js-cookie": "^3.0.5",
-    "next": "15.5.3",
+    "next": "^16.1.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.6.0",

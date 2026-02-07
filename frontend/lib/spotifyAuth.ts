@@ -7,6 +7,13 @@ const getRedirectUri = (): string => {
       : 'http://127.0.0.1:3000/callback');
 };
 
+const normalizeBaseUrl = (raw: string): string => {
+  const trimmed = raw.trim().replace(/\/+$/, '');
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+  if (trimmed.startsWith('/')) return trimmed;
+  return `/${trimmed}`;
+};
+
 export const getAuthUrl = () => {
   const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
   if (!clientId) {
@@ -24,7 +31,7 @@ export const getAuthUrl = () => {
 };
 
 export const exchangeCodeForTokens = async (code: string) => {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+  const API_BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080');
   
   // Send code and redirect_uri as form data (backend expects @RequestParam)
   const formData = new URLSearchParams();

@@ -1,64 +1,103 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { exchangeCodeForTokens } from '@/lib/spotifyAuth';
+import { Suspense, useEffect, useState, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { exchangeCodeForTokens } from '@/lib/spotifyAuth';
 
-export default function CallbackPage() {
-  const router = useRouter();
+function CallbackContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState('');
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
-    handleCallback();
-  }, []);
+    // Prevent multiple executions
+    if (hasProcessed.current) return;
+    
+    const code = searchParams.get('code');
+    const error = searchParams.get('error');
 
-  const handleCallback = async () => {
-    try {
-      const code = searchParams.get('code');
-      const error = searchParams.get('error');
+    // Clean up URL
+    window.history.replaceState({}, document.title, '/callback');
 
-      if (error) {
-        setStatus('error');
-        setErrorMessage('Access denied. Please try again.');
-        return;
-      }
-
-      if (!code) {
-        setStatus('error');
-        setErrorMessage('No authorization code received.');
-        return;
-      }
-
-      // Exchange code for tokens directly with Spotify
-      const { access_token, expires_in } = await exchangeCodeForTokens(code);
-
-      // Store tokens in cookies (no domain restriction for localhost/127.0.0.1 compatibility)
-      
-      Cookies.set('spotify_access_token', access_token, {
-        expires: new Date(Date.now() + expires_in * 1000),
-        secure: false,
-        sameSite: 'lax',
-        path: '/',
-        // Don't set domain to allow access from both localhost and 127.0.0.1
-      });
-      
-
-      setStatus('success');
-      
-      // Redirect to dashboard after a short delay
-      setTimeout(() => {
-        // Use current origin instead of hardcoded URL
-        window.location.href = window.location.origin + '/';
-      }, 2000);
-
-    } catch (error) {
+    if (error) {
+      hasProcessed.current = true;
       setStatus('error');
-      setErrorMessage('Failed to authenticate with Spotify. Please try again.');
+        setErrorMessage('Access denied. Please try again.');
+      return;
     }
-  };
+
+    if (!code) {
+      // Don't show error immediately - wait a bit in case code is still loading
+      const timeout = setTimeout(() => {
+        if (!hasProcessed.current) {
+          hasProcessed.current = true;
+          setStatus('error');
+          setErrorMessage('No authorization code received. Please try again.');
+        }
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+
+    // Mark as processing
+    hasProcessed.current = true;
+
+    // Exchange code for tokens via backend API
+    let redirectTimer: ReturnType<typeof setTimeout> | null = null;
+    
+    exchangeCodeForTokens(code)
+      .then((tokenData) => {
+        // Store access token in cookie
+        const accessToken = tokenData.access_token;
+        if (!accessToken) {
+          setStatus('error');
+          setErrorMessage('No access token received. Please try again.');
+          return;
+        }
+
+        // expires_in is in seconds, convert to days for cookie expiration
+        // Spotify tokens typically expire in 3600 seconds (1 hour)
+        const expiresInDays = tokenData.expires_in ? Math.max(1, Math.ceil(tokenData.expires_in / 86400)) : 1;
+        
+        // Set cookie with explicit options
+        Cookies.set('spotify_access_token', accessToken, { 
+          expires: expiresInDays,
+          secure: window.location.protocol === 'https:',
+          sameSite: 'lax',
+          path: '/'
+        });
+        
+        // Verify cookie was set
+        const cookieValue = Cookies.get('spotify_access_token');
+        if (!cookieValue) {
+          console.error('Failed to set cookie');
+          setStatus('error');
+          setErrorMessage('Failed to save authentication token. Please try again.');
+          return;
+        }
+        
+        setStatus('success');
+        
+        // Redirect after a short delay to ensure cookie is saved
+        redirectTimer = setTimeout(() => {
+          // Force a hard redirect to ensure cookie is read
+          window.location.href = '/';
+        }, 1500);
+      })
+      .catch((err) => {
+        console.error('Token exchange error:', err);
+        setStatus('error');
+        setErrorMessage(err.message || 'Failed to exchange authorization code. Please try again.');
+      });
+    
+    // Cleanup function
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
+      }
+    };
+  }, [searchParams]);
 
   if (status === 'loading') {
     return (
@@ -78,7 +117,9 @@ export default function CallbackPage() {
           <h1 className="text-2xl font-bold text-white mb-4">Authentication Failed</h1>
           <p className="text-gray-400 mb-6">{errorMessage}</p>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => {
+              window.location.href = '/';
+            }}
             className="btn-primary"
           >
             Try Again
@@ -96,8 +137,28 @@ export default function CallbackPage() {
         </div>
         <h1 className="text-2xl font-bold text-white mb-4">Successfully Connected!</h1>
         <p className="text-gray-400 mb-6">Redirecting to your dashboard...</p>
-        <div className="w-8 h-8 border-2 border-spotify-green border-t-transparent rounded-full animate-spin mx-auto" />
+        <div className="w-8 h-8 border-2 border-spotify-green border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <button
+          onClick={() => {
+            window.location.href = '/';
+          }}
+          className="btn-primary mt-4"
+        >
+          Go to Dashboard
+        </button>
       </div>
     </div>
+  );
+}
+
+export default function CallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-spotify-black flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-spotify-green border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <CallbackContent />
+    </Suspense>
   );
 }
