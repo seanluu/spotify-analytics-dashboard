@@ -1,0 +1,38 @@
+groups:
+  - name: spotify-dashboard
+    rules:
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend is down"
+          description: "Prometheus cannot scrape the backend metrics endpoint."
+
+      - alert: BackendHighErrorRate
+        expr: |
+          (
+            sum(rate(http_server_requests_seconds_count{job="backend", status=~"5.."}[5m]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="backend"}[5m]))
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High 5xx error rate"
+          description: "Backend 5xx rate is > 5% over the last 5 minutes."
+
+      - alert: BackendHighLatencyP95
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(http_server_requests_seconds_bucket{job="backend"}[5m]))
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High p95 latency"
+          description: "Backend p95 latency is > 500ms over the last 5 minutes."
