@@ -1,0 +1,36 @@
+# environment variables
+.env
+.env.local
+.env.*.local
+.env.bak
+
+# ide
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# os
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+npm-debug.log*
+
+# build outputs
+backend/target/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/build/
+*.tsbuildinfo
+
+# dependencies
+node_modules/
+
+# vercel
+.vercel/
+backend/.vercel/
+
