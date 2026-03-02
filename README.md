@@ -1,6 +1,6 @@
-# Spotify Dashboard
+# Spotify Analytics Dashboard
 
-Spotify Dashboard is a modern, responsive web application that provides personalized Spotify analytics and insights. Users can connect their Spotify account to view their top artists, tracks, and genres with beautiful visualizations and interactive charts. Discover your music taste patterns across different time periods and explore your listening habits in an elegant, mobile-first interface.
+Spotify Analytics Dashboard is a modern, responsive web application that provides personalized Spotify analytics and insights. Users can connect their Spotify account to view their top artists, tracks, and genres with beautiful visualizations and interactive charts. Discover your music taste patterns across different time periods and explore your listening habits in an elegant, mobile-first interface.
 
 ## Installation
 
