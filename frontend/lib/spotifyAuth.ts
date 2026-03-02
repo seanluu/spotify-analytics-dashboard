@@ -37,20 +37,30 @@ export const exchangeCodeForTokens = async (code: string) => {
   const formData = new URLSearchParams();
   formData.append('code', code);
   formData.append('redirect_uri', getRedirectUri());
-  
-  const response = await fetch(`${API_BASE_URL}/api/v1/spotify/auth/callback`, {
+
+  const url = `${API_BASE_URL}/api/v1/spotify/auth/callback`;
+  const requestInit: RequestInit = {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: formData.toString(),
-  });
+  };
 
-  if (!response.ok) {
+  const parseError = async (response: Response): Promise<Error> => {
     const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-    // Handle both ErrorResponse format {error, message} and simple {error} format
-    const errorMessage = errorData.message || errorData.error || `Failed to exchange code for tokens (Status: ${response.status})`;
-    throw new Error(errorMessage);
+    const errorMessage =
+      errorData.message ||
+      errorData.error ||
+      `Failed to exchange code for tokens (Status: ${response.status})`;
+    return new Error(errorMessage);
+  };
+
+  let response = await fetch(url, requestInit);
+  // railway can briefly return 502/503 during container restarts
+  if (response.status === 502 || response.status === 503) {
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    response = await fetch(url, requestInit);
   }
 
-  const data = await response.json();
-  return data;
+  if (!response.ok) throw await parseError(response);
+  return response.json();
 };

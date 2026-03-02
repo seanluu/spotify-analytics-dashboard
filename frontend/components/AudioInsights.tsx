@@ -39,7 +39,7 @@ export function AudioInsights({ timeRange }: AudioInsightsProps) {
       setIsFetching(true);
       await api.post('/spotify/audio-features/fetch', null, {
         params: {
-          time_range: timeRange,
+          timeRange,
           limit: 50
         }
       });
