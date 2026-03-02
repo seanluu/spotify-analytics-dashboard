@@ -55,7 +55,7 @@ npm run dev
 
 ## Deployment
 
-Deployed on Vercel: [spotify-dashboard.vercel.app](https://spotify-dashboard.vercel.app)
+Deployed on Vercel: [spotify-audio-analytics-dashboard.vercel.app]([https://spotify-dashboard.vercel.app](http://spotify-audio-analytics-dashboard.vercel.app/))
 
 ## Usage
 
