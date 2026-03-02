@@ -12,7 +12,9 @@ ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 
 COPY package*.json ./
 
-RUN npm ci --legacy-peer-deps
+# use BuildKit cache mount for npm dependencies - caches node_modules between builds for faster rebuilds
+RUN --mount=type=cache,id=frontend-npm-cache,target=/root/.npm \
+    npm ci --legacy-peer-deps
 
 COPY . .
 
