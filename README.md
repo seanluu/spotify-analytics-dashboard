@@ -108,11 +108,11 @@ Deployed on Vercel: [spotify-audio-analytics-dashboard.vercel.app](https://spoti
 
 ## Tech Stack
 
-**Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons, Axios
-**Backend**: Spring Boot 3.4, Spring Security, Spring Data JPA, Spring Cache, Maven
-**Database**: PostgreSQL 16 (with persistent volumes)
-**Caching**: Redis 7
-**Security**: OAuth 2.0, Jasypt (token encryption)
-**Monitoring**: Prometheus, Grafana, Alertmanager, Micrometer
-**APIs**: Spotify Web API
-**DevOps**: Docker, Docker Compose
+- **Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons, Axios
+- **Backend**: Spring Boot 3.4, Spring Security, Spring Data JPA, Spring Cache, Maven
+- **Database**: PostgreSQL 16 (with persistent volumes)
+- **Caching**: Redis 7
+- **Security**: OAuth 2.0, Jasypt (token encryption)
+- **Monitoring**: Prometheus, Grafana, Alertmanager, Micrometer
+- **APIs**: Spotify Web API, ReccoBeats API
+- **DevOps**: Docker, Docker Compose
