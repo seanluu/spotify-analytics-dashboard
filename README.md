@@ -14,6 +14,7 @@ cd spotify-dashboard-new
 # Add your Spotify credentials to .env file
 # SPOTIFY_CLIENT_ID=your_client_id
 # SPOTIFY_CLIENT_SECRET=your_client_secret
+#
 
 # Start everything
 docker compose up -d --build
@@ -108,11 +109,11 @@ Deployed on Vercel: [spotify-audio-analytics-dashboard.vercel.app](https://spoti
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons, Axios
-- **Backend**: Spring Boot 3.4, Spring Security, Spring Data JPA, Spring Cache, Maven
-- **Database**: PostgreSQL 16 (with persistent volumes)
-- **Caching**: Redis 7
-- **Security**: OAuth 2.0, Jasypt (token encryption)
-- **Monitoring**: Prometheus, Grafana, Alertmanager, Micrometer
-- **APIs**: Spotify Web API, ReccoBeats API
-- **DevOps**: Docker, Docker Compose
+**Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Recharts, Heroicons, Axios
+**Backend**: Spring Boot 3.4, Spring Security, Spring Data JPA, Spring Cache, Maven
+**Database**: PostgreSQL 16 (with persistent volumes)
+**Caching**: Redis 7
+**Security**: OAuth 2.0, Jasypt (token encryption)
+**Monitoring**: Prometheus, Grafana, Alertmanager, Micrometer
+**APIs**: Spotify Web API
+**DevOps**: Docker, Docker Compose
